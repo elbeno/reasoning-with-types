@@ -30,6 +30,8 @@
 # For normal presentation output:
 #+LaTeX_CLASS_OPTIONS: [bigger]
 
+* What is a type?
+What do you think?
 
 * Let's play a game
 To help us get thinking about types.
@@ -86,7 +88,7 @@ struct Foo
 #+end_src
 
 * End of Level 1
-- A type is characterised by the number of values that inhabit it.
+- Algebraically, a type is the number of values that inhabit it.
 ** These types are equivalent
 #+begin_src c++
 bool;
@@ -131,7 +133,8 @@ tuple<bool, bool, bool>;
 template <class T, class U>
 struct Foo
 {
-  pair<T,U> m_p;
+  T m_t;
+  U m_u;
 };
 #+end_src
 
@@ -231,19 +234,20 @@ U f(T);
 #+end_src
 
 * Victory!
-- The type of a _function_ from A to B has \(B^A\) possible values.
+- The type of a _function_ from \(\mathnormal{A}\) to \(\mathnormal{B}\) has \(\mathnormal{B^A}\) possible values.
 - Hence a curried function is equivalent to its uncurried alternative:
+
 ** block                                                   :B_ignoreheading:
 :PROPERTIES:
 :BEAMER_env: ignoreheading
 :END:
 #+BEGIN_LaTeX
 \begin{align*}
-F_{uncurried}::(A,B) \rightarrow C & \Leftrightarrow C^{A*B} \\
-& = C^{B*A} \\
-& = (C^B)^A \\
-& \Leftrightarrow (B \rightarrow C)^A \\
-& \Leftrightarrow F_{curried}::A \rightarrow B \rightarrow C
+\mathnormal{F_{uncurried}::(A,B) \rightarrow C} & \mathnormal{\Leftrightarrow C^{A*B}} \\
+& \mathnormal{= C^{B*A}} \\
+& \mathnormal{= (C^B)^A} \\
+& \mathnormal{\Leftrightarrow (B \rightarrow C)^A} \\
+& \mathnormal{\Leftrightarrow F_{curried}::A \rightarrow (B \rightarrow C)}
 \end{align*}
 #+END_LaTeX
 - WARNING: Boss detected ahead!
@@ -256,10 +260,58 @@ class vector<T>;
 #+end_src
 
 * Boss: Algebraic Enigma "Data Structure"
+We can define a \texttt{vector<T>} recursively:
+
+** block                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+#+BEGIN_LaTeX
+\begin{align*}
+\mathnormal{v(t) =} & \mathnormal{1 + t v(t)}
+\end{align*}
+#+END_LaTeX
+
+** block                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+And rearrange...
+
+** block                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+#+BEGIN_LaTeX
+\begin{align*}
+\mathnormal{v(t) - t v(t) =} & \mathnormal{1} \\
+\mathnormal{v(t) (1-t) =} & \mathnormal{1} \\
+\mathnormal{v(t) =} & \mathnormal{\frac{1}{1-t}}
+\end{align*}
+#+END_LaTeX
+
+* Boss: Algebraic Enigma "Data Structure"
+** block                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+#+BEGIN_LaTeX
+\begin{align*}
+\mathnormal{v(t) =} & \mathnormal{\frac{1}{1-t}}
+\end{align*}
+#+END_LaTeX
+
+** block                                                   :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+What does it mean? Let's [[http://www.wolframalpha.com/input/?i=1%2F%281-t%29][\color{blue}ask Wolfram Alpha]].
+
+* Boss: Algebraic Enigma "Data Structure"
 A \texttt{vector<T>} can have:
-- 0 elements (1)
-- 1 element (\texttt{T})
-- 2 elements (\(\texttt{T}^2\))
+- 0 elements (\(\mathnormal{1}\))
+- 1 element (\(\mathnormal{t}\))
+- 2 elements (\(\mathnormal{t^2}\))
 - etc...
 
 * Boss: Algebraic Enigma "Data Structure"
@@ -267,19 +319,21 @@ A \texttt{vector<T>} can have:
 #+BEGIN_LaTeX
 \begin{align*}
 \texttt{vector<T>} &
-\Leftrightarrow 1 + \texttt{T} + \texttt{T}^2 + \texttt{T}^3 + ... \\
-& = \frac{1}{1-\texttt{T}}
+\mathnormal{\Leftrightarrow 1 + t + t^2 + t^3 + ...} \\
+& \mathnormal{= \frac{1}{1-t}}
 \end{align*}
 #+END_LaTeX
 
 * Victory!
 Reasoning about types in an algebraic way allows us to discover equivalent
-formulations for APIs, Data Structures, etc which may be more natural.
+formulations for APIs, Data Structures, etc which may be more natural or more efficient.
 
 * Let's play another game
 I'll give you a mystery function type.
 
 You tell me possible ways to write and name the function.
+
+There's one rule: I insist on _total_ functions.
 
 * What's That Function?
 ** Name/Implement \texttt{f}
@@ -292,7 +346,7 @@ T f(T);
 ** Name/Implement \texttt{f}
 #+begin_src c++
 template <class T, class U>
-T f(T, U);
+T f(pair<T,U>);
 #+end_src
 
 * What's That Function?
@@ -361,3 +415,17 @@ optional<V> f(map<K,V>, K);
 * Victory!
 Type signatures can tell us a lot about functionality. Using the type system
 appropriately and writing _total functions_ makes interfaces safer to use.
+
+* The rabbit hole goes deeper
+- [[http://en.wikipedia.org/wiki/Algebraic_data_type][\color{blue}Algebraic data type (Wikipedia)]]
+- [[http://chris-taylor.github.io/blog/2013/02/10/the-algebra-of-algebraic-data-types/][\color{blue}The Algebra of Algebraic Data Types (blog)]]
+- [[http://https://www.youtube.com/watch?v=YScIPA8RbVE][\color{blue}The Algebra of Algebraic Data Types (video)]]
+
+Let's hope C++ gets sum types (variant) in the standard soon...
+
+* Goals for well-typed interfaces
+- Achieve formulations that:
+  - are more natural
+  - perform better
+- Write total functions
+- Make illegal states unrepresentable
