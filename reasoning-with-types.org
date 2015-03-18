@@ -29,6 +29,7 @@
 
 # For normal presentation output:
 #+LaTeX_CLASS_OPTIONS: [bigger]
+#+LaTeX_HEADER: \setbeamertemplate{navigation symbols}{}%remove navigation symbols
 
 * What is a type?
 What do you think?
@@ -327,6 +328,8 @@ A \texttt{vector<T>} can have:
 * Victory!
 Reasoning about types in an algebraic way allows us to discover equivalent
 formulations for APIs, Data Structures, etc which may be more natural or more efficient.
+\\[2\baselineskip]
+It also helps us prevent errors by making illegal states unrepresentable.
 
 * Let's play another game
 I'll give you a mystery function type.
@@ -429,3 +432,7 @@ Let's hope C++ gets sum types (variant) in the standard soon...
   - perform better
 - Write total functions
 - Make illegal states unrepresentable
+
+\begin{center}
+Reasoning with types helps with all of this - try it!
+\end{center}
