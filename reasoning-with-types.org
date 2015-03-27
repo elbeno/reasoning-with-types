@@ -398,6 +398,13 @@ vector<U> f(function <U(T)>, vector<T>);
 ** Name/Implement \texttt{f}
 #+begin_src c++
 template <class T>
+vector<T> f(function <bool(T)>, vector<T>);
+#+end_src
+
+* What's That Function?
+** Name/Implement \texttt{f}
+#+begin_src c++
+template <class T>
 T f(optional<T>);
 #+end_src
 
