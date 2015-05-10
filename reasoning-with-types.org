@@ -34,6 +34,28 @@
 * What is a type?
 What do you think?
 
+* What is a type?
+- A way for the compiler to know what opcodes to output (dmr's motivation)?
+- The way data is stored (representational)?
+- Characterised by what operations are possible (behavioural)?
+- Determines the values that can be assigned?
+- Determines the meaning of the data?
+
+* What is a type?
+- We can think about axes of type systems
+  - static vs dynamic
+  - strong vs weak
+  - structural vs nominal
+  - manifest vs inferred
+  - dependent types?
+
+* For today's purposes...
+- The set of values that can inhabit an expression
+  - may be finite or "infinite"
+  - characterized by cardinality
+- Expressions have types
+  - A program has a type
+
 * Let's play a game
 To help us get thinking about types.
 
@@ -42,35 +64,83 @@ I'll tell you a type.
 You tell me how many values it has.
 
 * Level 1
-** How many values?
+** How many values?                                                 :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 bool;
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+2 (\texttt{true} and \texttt{false})
+
 * Level 1
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 char;
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+256
+
 * Level 1
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 void;
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+0 (but cf function vs procedure)
+
 * Level 1
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 struct Foo
 {
 };
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+1
+
 * Level 1
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
-enum Foo
+enum class Foo
 {
   BAR,
   BAZ,
@@ -78,8 +148,19 @@ enum Foo
 };
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+3
+
 * Level 1
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T>
 struct Foo
@@ -88,13 +169,23 @@ struct Foo
 };
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+\texttt{Foo} has as many values as \texttt{T}
+
 * End of Level 1
 - Algebraically, a type is the number of values that inhabit it.
-** These types are equivalent
+** These types are equivalent                                      :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
 #+begin_src c++
 bool;
 
-enum Foo
+enum class Foo
 {
   BAR,
   BAZ
@@ -107,13 +198,28 @@ enum Foo
 - Let's move on to level 2.
 
 * Level 2
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 pair<char, bool>;
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+256 * 2 = 512
+
 * Level 2
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 struct Foo
 {
@@ -122,14 +228,36 @@ struct Foo
 };
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+256 * 2 = 512
+
 * Level 2
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 tuple<bool, bool, bool>;
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+2 * 2 * 2 = 8
+
 * Level 2
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T, class U>
 struct Foo
@@ -139,6 +267,13 @@ struct Foo
 };
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+T * U
+
 * End of Level 2
 - When two types are "concatenated" into one compound type, we _multiply_ the # of
   inhabitants of the components.
@@ -146,19 +281,45 @@ struct Foo
 - On to Level 3.
 
 * Level 3
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 optional<char>;
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+256 + 1 = 257
+
 * Level 3
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 variant<char, bool>;
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+256 + 2 = 258
+
 * Level 3
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T, class U>
 struct Foo
@@ -167,6 +328,13 @@ struct Foo
 };
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+T + U
+
 * End of Level 3
 - When two types are "alternated" into one compound type, we _add_ the # of
   inhabitants of the components.
@@ -174,7 +342,11 @@ struct Foo
 - Caution: Miniboss detected ahead.
 
 * Level 4
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T>
 struct Foo
@@ -183,8 +355,19 @@ struct Foo
 };
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+T + T = 2T
+
 * Level 4
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T>
 struct Foo
@@ -194,14 +377,27 @@ struct Foo
 };
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+2T (equivalent to \texttt{variant<T,T>})
+
 * Level 4
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
 #+begin_src c++
 bool f(bool);
 #+end_src
 
 * Level 4
-** Four possible values
+** Four possible values                                            :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
 #+begin_src c++
 bool f1(bool) { return true; }
 bool f2(bool) { return false; }
@@ -210,15 +406,30 @@ bool f4(bool b) { return !b; }
 #+end_src
 
 * Miniboss: Algebraic Conundrum "Function"
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 char f(bool);
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+256 * 256 = 65536
+
 * Miniboss: Algebraic Conundrum "Function"
-** How many values (for \texttt{f})?
+** How many values (for \texttt{f})?                               :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
-enum Foo
+enum class Foo
 {
   BAR,
   BAZ,
@@ -227,15 +438,35 @@ enum Foo
 char f(Foo);
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+\(2^8 * 2^8 * 2^8 = 2^{24}\)
+
 * Miniboss: Algebraic Conundrum "Function"
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T, class U>
 U f(T);
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+\(U^T\)
+
 * Victory!
 - The type of a _function_ from \(\mathnormal{A}\) to \(\mathnormal{B}\) has \(\mathnormal{B^A}\) possible values.
+
+* Victory!
 - Hence a curried function is equivalent to its uncurried alternative:
 
 ** block                                                   :B_ignoreheading:
@@ -254,7 +485,10 @@ U f(T);
 - WARNING: Boss detected ahead!
 
 * Boss: Algebraic Enigma "Data Structure"
-** How many values?
+** How many values?                                                :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
 #+begin_src c++
 template <typename T>
 class vector<T>;
@@ -331,6 +565,47 @@ formulations for APIs, Data Structures, etc which may be more natural or more ef
 \\[2\baselineskip]
 It also helps us prevent errors by making illegal states unrepresentable.
 
+* Make Illegal States Unrepresentable
+#+begin_src c++
+class InterfaceImpl : ...
+{
+  ...
+  ConnectionState m_connectionState;
+  ...
+  ConnectionId m_connectionId;
+  Timer* m_reconnectTimer;
+  Region m_connectedRegion;
+  u64 m_sessionToken;
+  ...
+};
+#+end_src
+- Some data members are dependent on others?
+- Use types to express this
+
+* Make Illegal States Unrepresentable
+#+begin_src c++
+class Friend
+{
+  ...
+  std::string m_friendNote;
+  bool m_friendNotePopulated;
+  ...
+};
+#+end_src
+- We still use \texttt{bool} to guard access/provide lazy initialization?
+- We could use \texttt{optional} instead
+
+* Make Illegal States Unrepresentable
+- Construct in a legal state
+  - or you'll be checking /everywhere/
+- Any time you have a state variable
+  - consider pushing dependent state down into an object
+- Look for state in the wrong place
+  - per instance vs per class
+  - take care over caching
+- Consider \texttt{optional} vs \texttt{bool} or pointers
+  - maybe \texttt{weak_ptr} makes sense for externalized state
+
 * Let's play another game
 I'll give you a mystery function type.
 
@@ -339,88 +614,223 @@ You tell me possible ways to write and name the function.
 There's one rule: I insist on _total_ functions.
 
 * What's That Function?
-** Name/Implement \texttt{f}
+** Name/Implement \texttt{f}                                       :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T>
 T f(T);
 #+end_src
 
+** Answer                                                           :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+\texttt{identity}
+
 * What's That Function?
-** Name/Implement \texttt{f}
+** Name/Implement \texttt{f}                                       :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T, class U>
 T f(pair<T,U>);
 #+end_src
 
+** Possible answer                                                  :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+\texttt{first}
+
 * What's That Function?
-** Name/Implement \texttt{f}
+** Name/Implement \texttt{f}                                       :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T>
 T f(bool, T, T);
 #+end_src
 
+** Possible answer                                                  :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+\texttt{select}
+
 * What's That Function?
-** Name/Implement \texttt{f}
+** Name/Implement \texttt{f}                                       :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T, class U>
 U f(function<U(T)>, T);
 #+end_src
 
+** Possible answer                                                  :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+\texttt{apply}
+
 * What's That Function?
-** Name/Implement \texttt{f}
+** Name/Implement \texttt{f}                                       :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T>
 vector<T> f(vector<T>);
 #+end_src
 
+** Possible answers                                                 :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+\texttt{shuffle}, \texttt{reverse}
+
 * What's That Function?
-** Name/Implement \texttt{f}
+** Name/Implement \texttt{f}                                       :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T>
 T f(vector<T>);
 #+end_src
 
+** Possible answer                                                  :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+Not possible! (partial function)
+
 * What's That Function?
-** Name/Implement \texttt{f}
+** Name/Implement \texttt{f}                                       :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T>
 optional<T> f(vector<T>);
 #+end_src
 
+** Possible answer                                                  :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+\texttt{head}
+
 * What's That Function?
-** Name/Implement \texttt{f}
+** Name/Implement \texttt{f}                                       :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T, class U>
 vector<U> f(function <U(T)>, vector<T>);
 #+end_src
 
+** Possible answer                                                  :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+\texttt{map}
+
 * What's That Function?
-** Name/Implement \texttt{f}
+** Name/Implement \texttt{f}                                       :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T>
 vector<T> f(function <bool(T)>, vector<T>);
 #+end_src
 
+** Possible answers                                                 :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+\texttt{filter}, \texttt{partition}
+
 * What's That Function?
-** Name/Implement \texttt{f}
+** Name/Implement \texttt{f}                                       :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class T>
 T f(optional<T>);
 #+end_src
 
+** Possible answer                                                  :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+Not possible!
+
 * What's That Function?
-** Name/Implement \texttt{f}
+** Name/Implement \texttt{f}                                       :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class K, class V>
 V f(map<K,V>, K);
 #+end_src
 
+** Possible answer                                                  :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+Not possible! But nevertheless:
+#+begin_src c++
+V& map<K,V>::operator[](const K&);
+#+end_src
+
 * What's That Function?
-** Name/Implement \texttt{f}
+** Name/Implement \texttt{f}                                       :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
 #+begin_src c++
 template <class K, class V>
 optional<V> f(map<K,V>, K);
 #+end_src
+
+** Possible answer                                                  :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_act: <+->
+:END:
+\texttt{lookup}
 
 * Victory!
 Type signatures can tell us a lot about functionality. Using the type system
@@ -430,7 +840,7 @@ appropriately and writing _total functions_ makes interfaces safer to use.
 - [[http://en.wikipedia.org/wiki/Algebraic_data_type][\color{blue}Algebraic data type (Wikipedia)]]
 - [[http://chris-taylor.github.io/blog/2013/02/10/the-algebra-of-algebraic-data-types/][\color{blue}The Algebra of Algebraic Data Types (blog)]]
 - [[http://https://www.youtube.com/watch?v=YScIPA8RbVE][\color{blue}The Algebra of Algebraic Data Types (video)]]
-
+- [[https://vimeo.com/14313378][\color{blue}Effective ML]](Making Illegal States Unrepresentable)
 Let's hope C++ gets sum types (variant) in the standard soon...
 
 * Goals for well-typed interfaces
